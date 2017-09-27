@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} 个人资料 - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+    <h1>{{ user.username }}</h1>
+    {% if user.realname %}
+    <p>
+      RealName: {{ user.realname }}
+    </p>
+    {% endif %}
+    {% if current_user.is_administrator() %}
+    <p><a href="mailto:{{ user.email }}">{{ user.email }}</a> </p>
+    {% endif %}
+    {% if user == current_user %}
+    <p>
+        
+    </p>
+    {% endif %}
+    <p>
+        {% if user == current_user %}
+        <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">Edit Profile</a>
+        {% endif %}
+        {% if current_user.is_administrator() %}
+        <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">Edit Profile[ADMIN]</a>
+        {% endif %}
+    </p>
+    </div>
+</div>
+{% if books != [] %}
+<ul class="posts">
+    {% for book in books %}
+    <li class="post">
+        <div class="post-content">
+            <div class="post-date">TotalNumber : {{ book.totalNumber}}</div>
+           <a href="{{ url_for('main.book', book_id=book.id) }}"> <div class="post-author">BookName: {{ book.bookname }}   Author:{{ book.author }}</div> </a>
+            <div class="post-body">Introduction: {{ book.info }}</div>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
